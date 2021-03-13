@@ -1,9 +1,9 @@
-import { Application, config } from "./deps.ts";
+import { Application, config, parse } from "./deps.ts";
 import BitBucketRoutes from "./routes/bitbucket.ts";
 
 config({ export: true, safe: true });
 
-const PORT = Number(Deno.env.get("PORT")) || 3000;
+const PORT = parse(Deno.args).port || 3000;
 
 const app = new Application();
 
