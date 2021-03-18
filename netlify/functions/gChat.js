@@ -1,6 +1,8 @@
 const axios = require('axios');
-const prOpened = require('../../src/actions/gChat/prOpened');
 const { EVENT_KEYS } = require('../../src/enums');
+
+const prOpened = require('../../src/actions/gChat/prOpened');
+const commentAdded = require('../../src/actions/gChat/commentAdded');
 
 exports.handler = async function(event, context) {
   const G_CHAT_URL = process.env.G_CHAT_URL;
@@ -11,6 +13,8 @@ exports.handler = async function(event, context) {
     switch (payload.eventKey) {
       case EVENT_KEYS.OPENED:
         return prOpened(payload)
+      case EVENT_KEYS.COMMENT_ADDED:
+        return commentAdded(payload)
       default:
         return {
           message: 'Event not supported'
