@@ -73,10 +73,8 @@ async function handleSomething(body: IBitbucketWebhook) {
     )
   }
 
-  const { json: { message } } = await response.json();
-
   return new Response(
-    JSON.stringify({ message }, null, 2),
+    JSON.stringify({ message: "Message sent successfully" }, null, 2),
     responseInit
   );
 }
