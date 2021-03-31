@@ -6,18 +6,6 @@ export enum BitbucketEventKeys {
   COMMENT_ADDED = "pr:comment:added",
 }
 
-export interface ITeamsConnector {
-  summary: string;
-  "@type": string;
-  title: string;
-  sections: { facts: { name: string; value: string }[]; text: string }[];
-  potentialAction: {
-    "@type": string;
-    name: string;
-    targets: { os: string; uri: string }[];
-  }[];
-}
-
 export interface IBitbucketRef {
   displayId: string;
   repository: {
