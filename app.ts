@@ -5,7 +5,7 @@ addEventListener("fetch", (event) => {
   event.respondWith(handleRequest(event.request))
 });
 
-const paths: {[key: string]: (body?: any) => Response} = {
+const paths: {[key: string]: (body?: any) => Promise<Response>} = {
   "bitbucket/chat": handleSomething,
 };
 
@@ -45,25 +45,47 @@ async function handleRequest(request: Request) {
 
   const method = (paths[path] && paths[path]) || notFoundHandler;
 
-  return method(await request.json());
+  const payload = await method(await request.json());
+  return payload
 }
 
 function notFoundHandler() {
-  return new Response(null, { status: 404, statusText: 'Route Not Found' });
+  return Promise.resolve(
+    new Response(null, { status: 404, statusText: 'Route Not Found' })
+  );
 }
 
-function handleSomething(body: IBitbucketWebhook) {
+async function handleSomething(body: IBitbucketWebhook) {
   const responseInit = {
     headers: {
       "Content-Type": "application/json; charset=utf-8",
     }
   };
 
-  const response = GChatPROPened(body);
+  const gChatPayload = GChatPROPened(body);
+
+  const response = await sendNotification(Deno.env.get("G_CHAT_URL") || '', gChatPayload);
+
+  if (!response.ok) {
+    return new Response(
+      JSON.stringify({ message: "couldn't process your request" }),
+      { ...responseInit, status: 500 }
+    )
+  }
+
+  const { json: { message } } = await response.json();
 
   return new Response(
-    JSON.stringify({ response }, null, 2),
+    JSON.stringify({ message }, null, 2),
     responseInit
   );
+}
+
+function sendNotification(url: string, body: any) {
+  return fetch(url, {
+    method: "POST",
+    body: JSON.stringify(body),
+    headers: { "Content-Type": "application/json" }
+  });
 }
 
