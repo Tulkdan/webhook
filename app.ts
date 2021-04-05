@@ -1,5 +1,5 @@
-import { IBitbucketWebhook } from "./interfaces.ts";
-import { GChatPROPened } from "./payloads.ts";
+import { IBitbucketWebhook, BitbucketEventKeys } from "./interfaces.ts";
+import { GChatPROPened, GChatApproved, GChatNeedsWork, GChatCommented } from "./payloads.ts";
 
 addEventListener("fetch", (event) => {
   event.respondWith(handleRequest(event.request))
@@ -62,7 +62,18 @@ async function handleSomething(body: IBitbucketWebhook) {
     }
   };
 
-  const gChatPayload = GChatPROPened(body);
+  const gChatPayload = ((eventKey) => {
+    switch(eventKey) {
+      case BitbucketEventKeys.OPENED:
+        return GChatPROPened(body);
+      case BitbucketEventKeys.APPROVED:
+        return GChatApproved(body);
+      case BitbucketEventKeys.NEEDS_WORK:
+        return GChatNeedsWork(body);
+      case BitbucketEventKeys.COMMENT_ADDED:
+        return GChatCommented(body);
+    }
+  })(body.eventKey)
 
   const response = await sendNotification(Deno.env.get("G_CHAT_URL") || '', gChatPayload);
 
