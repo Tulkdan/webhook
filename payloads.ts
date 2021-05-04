@@ -188,12 +188,12 @@ const gChatFlags = (
 });
 
 export function GChatApproved(receivedPayload: IBitbucketWebhook) {
-  const { pullRequest } = receivedPayload;
+  const { pullRequest, actor } = receivedPayload;
 
   const sectionsWidgets = [
     {
       topLabel: "Aprovador",
-      content: pullRequest.author.user.displayName,
+      content: actor.displayName,
       icon: "PERSON",
     },
     {
@@ -217,12 +217,12 @@ export function GChatApproved(receivedPayload: IBitbucketWebhook) {
 }
 
 export function GChatNeedsWork(receivedPayload: IBitbucketWebhook) {
-  const { pullRequest } = receivedPayload;
+  const { pullRequest, actor } = receivedPayload;
 
   const sectionsWidgets = [
     {
       topLabel: "Usuario",
-      content: pullRequest.author.user.displayName,
+      content: actor.displayName,
       icon: "PERSON",
     },
     {

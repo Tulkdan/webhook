@@ -33,4 +33,9 @@ export interface IBitbucketWebhook {
     text: string;
     author: IBitbucketUser;
   };
+  actor: {
+    name: string;
+    emailAddress: string;
+    displayName: string;
+  };
 }
