@@ -70,14 +70,14 @@ export function GChatPROPened(receivedPayload: IBitbucketWebhook) {
     })
   }
   
-  sectionsWidgets.map(generateWidgets);
+  const newSectionsWidgets = sectionsWidgets.map(generateWidgets);
 
   return {
     cards: [
       {
         header: { title: `Pull Request Criado: ${pullRequest.title}` },
         sections: [
-          { widgets: sectionsWidgets },
+          { widgets: newSectionsWidgets },
           {
             header: "Descricao",
             widgets: [
