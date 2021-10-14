@@ -57,7 +57,7 @@ export function GChatPROPened(receivedPayload: IBitbucketWebhook) {
     },
     {
       topLabel: "Branch de destingo",
-      content: pullRequest.toRef.displayId,
+      content: `<font color="#ff0000">${pullRequest.toRef.displayId}</font>`,
       icon: "FLIGHT_ARRIVAL",
     },
   ].map(generateWidgets);
