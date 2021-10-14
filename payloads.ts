@@ -34,7 +34,7 @@ const generateButton = (title: string, url: string) => ({
 export function GChatPROPened(receivedPayload: IBitbucketWebhook) {
   const { pullRequest } = receivedPayload;
 
-  const sectionsWidgets = [
+  let sectionsWidgets = [
     {
       topLabel: "Criador",
       content: pullRequest.author.user.displayName,
@@ -56,11 +56,19 @@ export function GChatPROPened(receivedPayload: IBitbucketWebhook) {
       icon: "FLIGHT_DEPARTURE",
     },
     {
-      topLabel: "Branch de destingo",
-      content: `<font color="#ff0000">${pullRequest.toRef.displayId}</font>`,
+      topLabel: "Branch de destino",
+      content: pullRequest.toRef.displayId,
       icon: "FLIGHT_ARRIVAL",
     },
-  ].map(generateWidgets);
+  ];
+  
+  if (['master', 'main'].includes(pullRequest.toRef.displayId)) {
+    sectionsWidgets.push({
+        content: "<font color=\"#ff0000\">Atualizar branches pendentes</font>"
+    })
+  }
+  
+  sectionsWidgets.map(generateWidgets);
 
   return {
     cards: [
