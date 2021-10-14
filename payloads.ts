@@ -64,6 +64,7 @@ export function GChatPROPened(receivedPayload: IBitbucketWebhook) {
   
   if (['master', 'main'].includes(pullRequest.toRef.displayId)) {
     sectionsWidgets.push({
+        topLabel: "Aviso!",
         content: "<font color=\"#ff0000\">Atualizar branches pendentes</font>"
     })
   }
